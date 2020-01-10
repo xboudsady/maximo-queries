@@ -64,7 +64,35 @@ Critera:
 * All fields/columns
 * Last 3 months from Today on Work Order Report Date
 * Site is Campus Only
+* No Tasks Work Order (PM Job Plan Tasks...)
 * Descending Order report date (Largest to Smallest)
+
+```sql
+        -- All Columns
+    SELECT * 
+
+        -- From the Work Order Table
+    FROM dbo.workorder
+
+        -- 3 months back from today
+    WHERE dbo.workorder.reportdate >= DATEADD(MONTH, -3, GETDATE())   
+        -- Not a Task Work Order
+        AND dbo.workorder.istask = 0    
+        -- Campus only,no Medical center
+        AND dbo.workorder.siteid = 'CAMPUS'     
+
+        -- Most recent date first
+    ORDER BY dbo.workorder.reportdate DESC;
+```
+
+## Labor (dbo.labor) Query
+
+
+### List all Labor for Campus
+Critera:
+* All fields/columns
+* Work Site is Campus
+* Descending Order laborcode (Largest to Smallest)
 
 ```sql
     SELECT * 
@@ -72,6 +100,7 @@ Critera:
     FROM dbo.workorder
 
     WHERE dbo.workorder.reportdate >= DATEADD(MONTH, -3, GETDATE())
+        AND dbo.workorder.siteid = 'CAMPUS'
 
     ORDER BY dbo.workorder.reportdate DESC;
 ```
