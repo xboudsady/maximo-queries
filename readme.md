@@ -54,3 +54,24 @@ But if you don't authenticate via Active Directory, there's no reason you can't 
     ```console
     Encryption type arcfour-hmac-md5(23) used for authentication is weak and will be deprecated
     ```
+
+---
+
+## Work Order Table (dbo.workorder) Query
+
+### List of Work Order, last 90 Days
+Critera:
+* All fields/columns
+* Last 3 months from Today on Work Order Report Date
+* Site is Campus Only
+* Descending Order report date (Largest to Smallest)
+
+```sql
+    SELECT * 
+
+    FROM dbo.workorder
+
+    WHERE dbo.workorder.reportdate >= DATEADD(MONTH, -3, GETDATE())
+
+    ORDER BY dbo.workorder.reportdate DESC;
+```
