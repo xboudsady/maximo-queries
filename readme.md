@@ -85,22 +85,25 @@ Critera:
     ORDER BY dbo.workorder.reportdate DESC;
 ```
 
-## Labor (dbo.labor) Query
+---
+
+## FBMS Finanial Journal
 
 
 ### List all Labor for Campus
 Critera:
 * All fields/columns
-* Work Site is Campus
+* Last 31 days
 * Descending Order laborcode (Largest to Smallest)
 
 ```sql
-    SELECT * 
+SELECT TOP 1000 * 
+    
+FROM dbo.financial_journals
 
-    FROM dbo.workorder
+WHERE dbo.financial_journals.PS_JOURNAL_DATE >= DATEADD(MONTH, -1, GETDATE())
 
-    WHERE dbo.workorder.reportdate >= DATEADD(MONTH, -3, GETDATE())
-        AND dbo.workorder.siteid = 'CAMPUS'
-
-    ORDER BY dbo.workorder.reportdate DESC;
+ORDER BY dbo.financial_journals.PS_JOURNAL_DATE DESC;
 ```
+
+
