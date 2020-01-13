@@ -126,22 +126,25 @@ SELECT
     dbo.workorder.wopriority AS 'WO Prioirty',
     dbo.workorder.wonum AS 'WO Number',
     dbo.workorder.[description] AS 'WO Description',
-    
 
-    -- 'Unique Bug' Category 'Bees', 'SilverFish', 'EarWig', 'Mosquitos'
-    -- 'Traps' is it's own category | Intalled Traps, Removed Traps
-    -- 'Ceiling' is Rodent
-    -- 'Racoon' is 'Animal Control' Type
-    -- 'Owl' is 'Animal Control'
-    -- 'Dog' is 'Animal Control'
-    -- 'Accounting' is 'Accounting Invoice'
-    -- 'Odor' is undder rodents
-    -- 'Interstitual, bio-hazard clean' - Special Projects
-
-    CASE 
+    CASE
+        WHEN dbo.workorder.[description] LIKE '%mite%'
+            THEN 'Mites'
+        WHEN dbo.workorder.[description] LIKE '%inter%'
+            THEN 'Special Projects'
+        WHEN dbo.workorder.[description] LIKE '%account%'
+            THEN 'Account Invoice'
+        WHEN dbo.workorder.[description] LIKE '%bat%'
+            THEN 'Animal Control'
+        WHEN dbo.workorder.[description] LIKE '%dog%'
+            THEN 'Animal Control'
+        WHEN dbo.workorder.[description] LIKE '%owl%'
+            THEN 'Animal Control'
+        WHEN dbo.workorder.[description] LIKE '%racoon%'
+            THEN 'Animal Control'
+        WHEN dbo.workorder.[description] LIKE '%trap%'
+            THEN 'Traps'
         WHEN dbo.workorder.[description] LIKE '%ant%'
-            THEN 'Ants'
-        WHEN dbo.workorder.[description] LIKE '%an%'
             THEN 'Ants'
         WHEN dbo.workorder.[description] LIKE '%aunt%'
             THEN 'Ants'
@@ -158,9 +161,13 @@ SELECT
         WHEN dbo.workorder.[description] LIKE '%wasp%'
             THEN 'Wasps'
         WHEN dbo.workorder.[description] LIKE '%bee%'
-            THEN 'Bees'
+            THEN 'Unique Bug'
         WHEN dbo.workorder.[description] LIKE '%fish%'
-            THEN 'Silver Fish'
+            THEN 'Unique Bug'
+        WHEN dbo.workorder.[description] LIKE '%earwig%'
+            THEN 'Unique Bug'
+        WHEN dbo.workorder.[description] LIKE '%mosqui%'
+            THEN 'Unique Bug'
         WHEN dbo.workorder.[description] LIKE '%yellow%'
             THEN 'Wasps'
         WHEN dbo.workorder.[description] LIKE '%spider%'
@@ -169,19 +176,25 @@ SELECT
             THEN 'Termines'
         WHEN dbo.workorder.[description] LIKE '%bed%'
             THEN 'Bed Bugs'
+        WHEN dbo.workorder.[description] LIKE '%ceiling%'
+            THEN 'Rodents'
         WHEN dbo.workorder.[description] like '%mouse%'
             THEN 'Rodents'
         WHEN dbo.workorder.[description] LIKE '%mice%'
             THEN 'Rodents'
+        WHEN dbo.workorder.[description] LIKE '%odor%'
+            THEN 'Rodents'
         WHEN dbo.workorder.[description] LIKE '%rat%'
             THEN 'Rodents'
-        WHEN dbo.workorder.[description] LIKE '%roden%'
+        WHEN dbo.workorder.[description] LIKE '%rodent%'
             THEN 'Rodents'
         WHEN dbo.workorder.[description] LIKE '%dropping%'
             THEN 'Rodents'
         WHEN dbo.workorder.[description] LIKE '%bird%'
             THEN 'Birds'
         WHEN dbo.workorder.[description] LIKE '%pigeon%'
+            THEN 'Birds'
+        WHEN dbo.workorder.[description] LIKE '%sea%'
             THEN 'Birds'
         WHEN dbo.workorder.[description] LIKE '%sea%'
             THEN 'Birds'
