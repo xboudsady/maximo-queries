@@ -87,7 +87,7 @@ Critera:
 
 ---
 
-## FBMS Finanial Journal
+## FBMS Financial Journal
 
 
 ### List all Labor for Campus
@@ -106,4 +106,109 @@ WHERE dbo.financial_journals.PS_JOURNAL_DATE >= DATEADD(MONTH, -1, GETDATE())
 ORDER BY dbo.financial_journals.PS_JOURNAL_DATE DESC;
 ```
 
+## Morgan Pest Control
 
+### List all Labor for Campus
+Critera:
+* All fields/columns
+* Last 31 days
+* Descending Order laborcode (Largest to Smallest)
+
+```sql
+SELECT 
+    -- Building Inforation
+    dbo.workorder.[location] AS 'Building CAAN Number',
+    dbo.locations.[description] AS 'Building Description',      -- Building Description from the dbo.locations table
+    dbo.locations.roomtype AS 'Room Type',
+    dbo.locations.[zone] AS 'Zone Type',
+    
+    -- Work Order Information
+    dbo.workorder.wopriority AS 'WO Prioirty',
+    dbo.workorder.wonum AS 'WO Number',
+    dbo.workorder.[description] AS 'WO Description',
+    
+    CASE 
+        WHEN dbo.workorder.[description] LIKE '%ant%'
+            THEN 'Ants'
+        WHEN dbo.workorder.[description] LIKE '%aunt%'
+            THEN 'Ants'
+        WHEN dbo.workorder.[description] LIKE '%flea%'
+            THEN 'Fleas'
+        WHEN dbo.workorder.[description] LIKE '%flie%'
+            THEN 'Flies'
+        WHEN dbo.workorder.[description] LIKE '%cock%'
+            THEN 'Cockroaches'
+        WHEN dbo.workorder.[description] LIKE '%roach%'
+            THEN 'Cockroaches'
+        WHEN dbo.workorder.[description] LIKE '%wasp%'
+            THEN 'Wasps'
+        WHEN dbo.workorder.[description] LIKE '%bee%'
+            THEN 'Bees'
+        WHEN dbo.workorder.[description] LIKE '%fish%'
+            THEN 'Fish'
+        WHEN dbo.workorder.[description] LIKE '%yellow%'
+            THEN 'Wasps'
+        WHEN dbo.workorder.[description] LIKE '%spider%'
+            THEN 'Spiders'
+        WHEN dbo.workorder.[description] LIKE '%bed%'
+            THEN 'Bed Bugs'
+        WHEN dbo.workorder.[description] like '%mouse%'
+            THEN 'Rodents'
+        WHEN dbo.workorder.[description] LIKE '%mice%'
+            THEN 'Rodents'
+        WHEN dbo.workorder.[description] LIKE '%rat%'
+            THEN 'Rodents'
+        WHEN dbo.workorder.[description] LIKE '%roden%'
+            THEN 'Rodents'
+        WHEN dbo.workorder.[description] LIKE '%dropping%'
+            THEN 'Rodents'
+        WHEN dbo.workorder.[description] LIKE '%bird%'
+            THEN 'Birds'
+        WHEN dbo.workorder.[description] LIKE '%pigeon%'
+            THEN 'Birds'
+        WHEN dbo.workorder.[description] LIKE '%sea%'
+            THEN 'Birds'
+        WHEN dbo.workorder.[description] LIKE '%pest%'
+            THEN 'General Pest Control Services'
+        WHEN dbo.workorder.[description] LIKE '%bug%'
+            THEN 'General Pest Control Services'
+        WHEN dbo.workorder.[description] LIKE '%bait%'
+            THEN 'General Pest Control Services'
+        WHEN dbo.workorder.[description] LIKE '%pod%'
+            THen 'General Pest Control Services'
+    END AS 'Pest Category',
+
+    dbo.workorder.reportdate AS 'WO Reported Date',
+    dbo.workorder.reportedby AS 'WO Reported By',
+    dbo.workorder.[status] AS 'WO Status',
+    dbo.workorder.worktype AS 'WO Type',
+    dbo.workorder.[owner] AS 'WO Owner',
+    dbo.workorder.ownergroup AS 'WO Owner Group',
+    dbo.workorder.actintlabhrs AS 'Actual Labor Hours',
+    dbo.workorder.actlabcost AS 'Actual Labor Cost',
+    dbo.workorder.actmatcost AS 'Actual Material Cost',
+    dbo.workorder.actservcost AS 'Actual Service Cost',
+    dbo.workorder.fbms_amountbilled AS 'FBMS Acmount Billed',
+    dbo.workorder.costcenter AS 'WO Cost Center',
+
+    -- Get WOK Classfication Type
+    dbo.workorder.classstructureid AS 'WO Classification Structure ID',
+    dbo.classstructure.[classificationid] AS 'WO Classification ID'
+
+    
+FROM dbo.workorder
+
+-- To get the Location Description
+INNER JOIN dbo.locations
+ON dbo.workorder.[location] = dbo.locations.[location] -- Foreign Key Building CAAN No.
+
+-- To get the Classification Structure Description
+LEFT JOIN dbo.classstructure
+ON dbo.workorder.classstructureid = dbo.classstructure.classstructureid
+
+WHERE dbo.locations.siteid = 'CAMPUS'  -- Get only Location from Campus Site
+    AND dbo.workorder.siteid = 'CAMPUS'    -- WO location with site ID of Campus Only
+    AND dbo.classstructure.classstructureid = 2089
+
+ORDER BY [Pest Category] ASC;
+```
