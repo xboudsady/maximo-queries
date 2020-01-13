@@ -127,8 +127,21 @@ SELECT
     dbo.workorder.wonum AS 'WO Number',
     dbo.workorder.[description] AS 'WO Description',
     
+
+    -- 'Unique Bug' Category 'Bees', 'SilverFish', 'EarWig', 'Mosquitos'
+    -- 'Traps' is it's own category | Intalled Traps, Removed Traps
+    -- 'Ceiling' is Rodent
+    -- 'Racoon' is 'Animal Control' Type
+    -- 'Owl' is 'Animal Control'
+    -- 'Dog' is 'Animal Control'
+    -- 'Accounting' is 'Accounting Invoice'
+    -- 'Odor' is undder rodents
+    -- 'Interstitual, bio-hazard clean' - Special Projects
+
     CASE 
         WHEN dbo.workorder.[description] LIKE '%ant%'
+            THEN 'Ants'
+        WHEN dbo.workorder.[description] LIKE '%an%'
             THEN 'Ants'
         WHEN dbo.workorder.[description] LIKE '%aunt%'
             THEN 'Ants'
@@ -136,6 +149,8 @@ SELECT
             THEN 'Fleas'
         WHEN dbo.workorder.[description] LIKE '%flie%'
             THEN 'Flies'
+        WHEN dbo.workorder.[description] LIKE '%fly%'
+            THEN 'Flies' 
         WHEN dbo.workorder.[description] LIKE '%cock%'
             THEN 'Cockroaches'
         WHEN dbo.workorder.[description] LIKE '%roach%'
@@ -145,11 +160,13 @@ SELECT
         WHEN dbo.workorder.[description] LIKE '%bee%'
             THEN 'Bees'
         WHEN dbo.workorder.[description] LIKE '%fish%'
-            THEN 'Fish'
+            THEN 'Silver Fish'
         WHEN dbo.workorder.[description] LIKE '%yellow%'
             THEN 'Wasps'
         WHEN dbo.workorder.[description] LIKE '%spider%'
             THEN 'Spiders'
+        WHEN dbo.workorder.[description] LIKE '%term%'
+            THEN 'Termines'
         WHEN dbo.workorder.[description] LIKE '%bed%'
             THEN 'Bed Bugs'
         WHEN dbo.workorder.[description] like '%mouse%'
@@ -175,7 +192,7 @@ SELECT
         WHEN dbo.workorder.[description] LIKE '%bait%'
             THEN 'General Pest Control Services'
         WHEN dbo.workorder.[description] LIKE '%pod%'
-            THen 'General Pest Control Services'
+            THen 'General Pestec Services'
     END AS 'Pest Category',
 
     dbo.workorder.reportdate AS 'WO Reported Date',
@@ -188,7 +205,7 @@ SELECT
     dbo.workorder.actlabcost AS 'Actual Labor Cost',
     dbo.workorder.actmatcost AS 'Actual Material Cost',
     dbo.workorder.actservcost AS 'Actual Service Cost',
-    dbo.workorder.fbms_amountbilled AS 'FBMS Acmount Billed',
+    dbo.workorder.fbms_amountbilled AS 'FBMS Amount Billed',
     dbo.workorder.costcenter AS 'WO Cost Center',
 
     -- Get WOK Classfication Type
