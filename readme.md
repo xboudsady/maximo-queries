@@ -142,6 +142,8 @@ SELECT
             THEN 'Animal Control'
         WHEN dbo.workorder.[description] LIKE '%racoon%'
             THEN 'Animal Control'
+        WHEN dbo.workorder.[description] LIKE '%possum%'
+            THEN 'Animal Control'
         WHEN dbo.workorder.[description] LIKE '%trap%'
             THEN 'Traps'
         WHEN dbo.workorder.[description] LIKE '%ant%'
@@ -162,11 +164,17 @@ SELECT
             THEN 'Wasps'
         WHEN dbo.workorder.[description] LIKE '%bee%'
             THEN 'Unique Bug'
+        WHEN dbo.workorder.[description] LIKE '%moth%'
+            THEN 'Unique Bug'
         WHEN dbo.workorder.[description] LIKE '%fish%'
+            THEN 'Unique Bug'
+        WHEN dbo.workorder.[description] LIKE '%gnat%'
             THEN 'Unique Bug'
         WHEN dbo.workorder.[description] LIKE '%earwig%'
             THEN 'Unique Bug'
         WHEN dbo.workorder.[description] LIKE '%mosqui%'
+            THEN 'Unique Bug'
+        WHEN dbo.workorder.[description] LIKE '%tick%'
             THEN 'Unique Bug'
         WHEN dbo.workorder.[description] LIKE '%yellow%'
             THEN 'Wasps'
@@ -186,11 +194,13 @@ SELECT
             THEN 'Rodents'
         WHEN dbo.workorder.[description] LIKE '%rat%'
             THEN 'Rodents'
-        WHEN dbo.workorder.[description] LIKE '%rodent%'
+        WHEN dbo.workorder.[description] LIKE '%roden%'
             THEN 'Rodents'
         WHEN dbo.workorder.[description] LIKE '%dropping%'
             THEN 'Rodents'
         WHEN dbo.workorder.[description] LIKE '%bird%'
+            THEN 'Birds'
+        WHEN dbo.workorder.[description] LIKE '%nest%'
             THEN 'Birds'
         WHEN dbo.workorder.[description] LIKE '%pigeon%'
             THEN 'Birds'
@@ -205,6 +215,8 @@ SELECT
         WHEN dbo.workorder.[description] LIKE '%bait%'
             THEN 'General Pest Control Services'
         WHEN dbo.workorder.[description] LIKE '%pod%'
+            THen 'General Pestec Services'
+        WHEN dbo.workorder.[description] LIKE '%infest%'
             THen 'General Pestec Services'
     END AS 'Pest Category',
 
@@ -238,7 +250,9 @@ ON dbo.workorder.classstructureid = dbo.classstructure.classstructureid
 
 WHERE dbo.locations.siteid = 'CAMPUS'  -- Get only Location from Campus Site
     AND dbo.workorder.siteid = 'CAMPUS'    -- WO location with site ID of Campus Only
-    AND dbo.classstructure.classstructureid = 2089
+    AND dbo.workorder.worktype NOT LIKE 'ST' -- No Standing Work Order
+    AND dbo.workorder.ownergroup IN ('M38', 'P38') -- Only East and West Pest Control Group
+    AND dbo.classstructure.classstructureid = 2089 -- WO Classification ID (PEST CONTROL (CAMPUS))
 
 ORDER BY [Pest Category] ASC;
 ```
