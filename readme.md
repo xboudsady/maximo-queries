@@ -128,11 +128,17 @@ SELECT
     dbo.workorder.[description] AS 'WO Description',
 
     CASE
+        WHEN dbo.workorder.[description] LIKE '%door sweep%'
+            THEN 'Door Sweeps'
         WHEN dbo.workorder.[description] LIKE '%mite%'
             THEN 'Mites'
         WHEN dbo.workorder.[description] LIKE '%inter%'
-            THEN 'Special Projects'
-        WHEN dbo.workorder.[description] LIKE '%account%'
+            THEN 'Pestec Projects'
+        WHEN dbo.workorder.[description] LIKE '%gopher%'
+            THEN 'Pestec Projects'
+        WHEN dbo.workorder.[description] LIKE '%project%'
+            THEN 'Pestec Projects'
+        WHEN dbo.workorder.[description] LIKE '%accty%'
             THEN 'Account Invoice'
         WHEN dbo.workorder.[description] LIKE '%bat%'
             THEN 'Animal Control'
@@ -209,11 +215,11 @@ SELECT
         WHEN dbo.workorder.[description] LIKE '%sea%'
             THEN 'Birds'
         WHEN dbo.workorder.[description] LIKE '%pest%'
-            THEN 'General Pest Control Services'
+            THEN 'General Pestec Services'
         WHEN dbo.workorder.[description] LIKE '%bug%'
-            THEN 'General Pest Control Services'
+            THEN 'General Pestec Services'
         WHEN dbo.workorder.[description] LIKE '%bait%'
-            THEN 'General Pest Control Services'
+            THEN 'General Pestec Services'
         WHEN dbo.workorder.[description] LIKE '%pod%'
             THen 'General Pestec Services'
         WHEN dbo.workorder.[description] LIKE '%infest%'
@@ -252,6 +258,10 @@ WHERE dbo.locations.siteid = 'CAMPUS'  -- Get only Location from Campus Site
     AND dbo.workorder.siteid = 'CAMPUS'    -- WO location with site ID of Campus Only
     AND dbo.workorder.worktype NOT LIKE 'ST' -- No Standing Work Order
     AND dbo.workorder.ownergroup IN ('M38', 'P38') -- Only East and West Pest Control Group
+    AND dbo.workorder.[description] NOT LIKE '%bearbuy%' -- Omit description containing bear buy work order
+    AND dbo.workorder.[description] NOT LIKE '%test%' -- Omit Test Work Order
+    AND dbo.workorder.[status] NOT LIKE 'can'
+
     AND dbo.classstructure.classstructureid = 2089 -- WO Classification ID (PEST CONTROL (CAMPUS))
 
 ORDER BY [Pest Category] ASC;
