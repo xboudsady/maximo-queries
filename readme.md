@@ -266,3 +266,29 @@ WHERE dbo.locations.siteid = 'CAMPUS'  -- Get only Location from Campus Site
 
 ORDER BY [Pest Category] ASC;
 ```
+
+## Custodial - Total Labor Hours, Materials, Costs for Event Setup
+
+### List all Labor for Campus
+Critera:
+* SiteID Campus Only
+* A
+* Descending Order laborcode (Largest to Smallest)
+
+```sql
+SELECT TOP 100 * FROM dbo.workorder;
+
+SELECT dbo.workorder.wonum AS 'WO Number',
+    dbo.workorder.wopriority AS 'WO Priority',
+    dbo.workorder.[description] AS 'WO Description',
+    dbo.workorder.[location] AS 'Location CAAN',
+    dbo.workorder.worktype AS 'WO Type',
+    dbo.workorder.actlabhrs AS 'Actual Labor Hours',
+    dbo.workorder.actlabcost AS 'Actual Labor Costs',
+    dbo.workorder.actmatcost AS 'Actual Material Costs'
+    
+
+FROM dbo.workorder
+
+WHERE dbo.workorder.siteid = 'CAMPUS';
+```
