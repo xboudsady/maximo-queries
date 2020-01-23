@@ -276,19 +276,45 @@ Critera:
 * Descending Order laborcode (Largest to Smallest)
 
 ```sql
-SELECT TOP 100 * FROM dbo.workorder;
-
-SELECT dbo.workorder.wonum AS 'WO Number',
+SELECT 
+    -- Building Inforation
+    dbo.workorder.[location] AS 'Building CAAN Number',
+    dbo.locations.[description] AS 'Building Description',      -- Building Description from the dbo.locations table
+    dbo.locations.roomtype AS 'Room Type',
+    dbo.locations.[zone] AS 'Zone Type',
+    
+    dbo.workorder.wonum AS 'WO Number',
+    dbo.workorder.reportdate AS 'WO Report Data',
     dbo.workorder.wopriority AS 'WO Priority',
     dbo.workorder.[description] AS 'WO Description',
     dbo.workorder.[location] AS 'Location CAAN',
     dbo.workorder.worktype AS 'WO Type',
+    dbo.workorder.[status] AS 'WO Status',
+    dbo.workorder.[owner] AS 'WO Owner',
+    dbo.workorder.ownergroup AS 'WO Owner Group',
+    
+
     dbo.workorder.actlabhrs AS 'Actual Labor Hours',
     dbo.workorder.actlabcost AS 'Actual Labor Costs',
-    dbo.workorder.actmatcost AS 'Actual Material Costs'
+    dbo.workorder.actmatcost AS 'Actual Material Costs',
+    dbo.workorder.actservcost AS 'Actual Service Cost',
+    dbo.workorder.fbms_amountbilled AS 'FBMS Amount Billed',
+    dbo.workorder.costcenter AS 'WO Cost Center'
     
 
 FROM dbo.workorder
 
-WHERE dbo.workorder.siteid = 'CAMPUS';
+-- To get the Location Description
+INNER JOIN dbo.locations
+ON dbo.workorder.[location] = dbo.locations.[location] -- Foreign Key Building CAAN No.
+
+-- To get the Classification Structure Description
+LEFT JOIN dbo.classstructure
+ON dbo.workorder.classstructureid = dbo.classstructure.classstructureid
+
+WHERE 
+    dbo.workorder.orgid = 'UCSF'
+    AND dbo.workorder.siteid = 'CAMPUS'
+    AND dbo.locations.siteid = 'CAMPUS'
+    AND dbo.classstructure.classstructureid = 1967 -- WO Classification ID (EVENT SET-UPS);
 ```
