@@ -318,3 +318,60 @@ WHERE
     AND dbo.locations.siteid = 'CAMPUS'
     AND dbo.classstructure.classstructureid = 1967 -- WO Classification ID (EVENT SET-UPS);
 ```
+
+---
+
+### Tidelands 590 & 600 Cost Center, from Girod Team, PersonGroup M25
+Critera:
+* Select Fields and Columns
+* Cost Center for Tidelands building 590 / 600
+* Person Group: M25 
+
+
+```sql
+SELECT  -- Work Order Description
+    dbo.workorder.wonum AS 'Work Order Number',
+    dbo.workorder.reportdate AS 'Work Order Reported Date',
+    dbo.workorder.[description] AS 'Work Order Description',
+    dbo.workorder.[location] AS 'Work Order CAAN Location',
+    dbo.locations.[description] AS 'Building Description',      -- Building Description from the dbo.locations table
+    dbo.workorder.[status] AS 'Work Order Status',
+    dbo.workorder.worktype AS 'Work Order Type',
+    dbo.workorder.[owner] AS 'Work Order Owner',
+    dbo.workorder.ownergroup AS 'Work Order Owner Group',
+    
+    -- Get WOK Classfication Type
+    dbo.workorder.classstructureid AS 'WO Classification Structure ID',
+    dbo.classstructure.[classificationid] AS 'WO Classification ID',
+
+    -- Asset & Job Plans
+    dbo.workorder.assetnum AS 'Asset Number',
+    dbo.workorder.jpnum AS 'Job Plan Number',
+
+    -- Estimate Hours & Costs // For PM Related WOrk Order
+    dbo.workorder.estlabhrs AS 'Labor Hours Estimate',
+    dbo.workorder.estlabcost AS 'Labor Hours Costs',
+
+    -- Actuals Hours & Costs
+    dbo.workorder.actlabhrs AS 'Labor Hours Actuals',
+    dbo.workorder.actlabcost AS 'Labor Hours Cost',
+
+
+    
+
+
+FROM dbo.workorder
+
+-- To get the Location Description
+INNER JOIN dbo.locations
+ON dbo.workorder.[location] = dbo.locations.location -- Foreign Key Building CAAN No.
+
+-- To get the Classification Structure Description
+LEFT JOIN dbo.classstructure
+ON dbo.workorder.classstructureid = dbo.classstructure.classstructureid
+
+WHERE dbo.workorder.costcenter IN ('CC3065RB', 'CC3065CU', 'CC3065BM', 'CC3065EV', 'CC3065FS', 'CC3065PM', 'CC3065RF', 'CC3065SC', 'CC3065TU',
+                                    'CC3064RB', 'CC3064CU', 'CC3064BM', 'CC3064RF', 'CC3064EV', 'CC3064FS', 'CC3064PM', 'CC3064SC', 'CC3064TU')
+    AND dbo.workorder.persongroup = 'M25H'
+;
+```
