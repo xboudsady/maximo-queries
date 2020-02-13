@@ -411,6 +411,9 @@ SELECT  -- PM Plan Information
         -- Job Plan Information
         dbo.pm.jpnum AS 'Job Plan No.',
         dbo.jobplan.[description] AS 'Job Plan Description',
+        (SELECT COUNT(dbo.jobtask.jobplanid)
+        FROM dbo.jobtask
+        WHERE dbo.jobplan.jobplanid = dbo.jobtask.jobplanid) AS 'Job Plan Tasks Count',
 
         -- PM Work Order Information
         dbo.pm.wostatus AS 'WO Default Status',
@@ -440,7 +443,7 @@ LEFT JOIN dbo.routes -- Foreign Key for Route
 ON dbo.pm.[route] = dbo.routes.route
 
 LEFT JOIN dbo.jobplan -- Foreign Key for Job Plan
-ON dbo.pm.jpnum = dbo.jobplan.[description]
+ON dbo.pm.jpnum = dbo.jobplan.jpnum
 
 LEFT JOIN dbo.costcenter
 ON dbo.pm.costcenter = dbo.costcenter.[description]
@@ -449,6 +452,7 @@ WHERE
         dbo.pm.siteid = 'CAMPUS'
     AND dbo.pm.persongroup = 'M4'
     AND dbo.pm.[status] = 'ACTIVE'
+    AND dbo.jobplan.[status] = 'ACTIVE'
 
 ORDER BY 'Asset Count' DESC
 ```
