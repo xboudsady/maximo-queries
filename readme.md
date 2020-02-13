@@ -356,10 +356,6 @@ SELECT  -- Work Order Description
     dbo.workorder.actlabhrs AS 'Labor Hours Actuals',
     dbo.workorder.actlabcost AS 'Labor Hours Cost',
 
-
-    
-
-
 FROM dbo.workorder
 
 -- To get the Location Description
@@ -374,4 +370,85 @@ WHERE dbo.workorder.costcenter IN ('CC3065RB', 'CC3065CU', 'CC3065BM', 'CC3065EV
                                     'CC3064RB', 'CC3064CU', 'CC3064BM', 'CC3064RF', 'CC3064EV', 'CC3064FS', 'CC3064PM', 'CC3064SC', 'CC3064TU')
     AND dbo.workorder.persongroup = 'M25H'
 ;
+```
+
+--- 
+
+### Tidelands 590 & 600 Cost Center, from Girod Team, PersonGroup M25
+Critera:
+* All PM Information
+* All Cost Associated
+* Job Plan Information
+
+```sql
+SELECT  -- PM Plan Information
+        dbo.pm.ltdpmcounter AS 'PM WO Counter',
+        dbo.pm.pmnum AS 'PM Plan No.',
+        dbo.pm.[description] AS 'PM Deescription',
+        dbo.pm.usefrequency AS 'Frequency Value',
+        dbo.pm.frequnit AS 'Frequncy Unit',
+        dbo.pm.leadtime AS 'Lead Time',
+        dbo.pm.nextdate AS 'Next WO Due Date',
+        dbo.pm.extdate AS 'Extended Date',
+        dbo.pm.masterpm AS 'Master PM',
+
+        -- PM Plan against a Location
+        dbo.pm.[location] AS 'Location CAAN',
+        dbo.locations.[description] AS 'Building Description',
+
+        -- PM Plan against an Asset
+        dbo.pm.assetnum AS 'Asset No',
+        dbo.asset.[description] AS 'Asset Description',
+
+        -- PM Plan against a Route
+        dbo.pm.[route] AS 'Route',
+        dbo.routes.[description] AS 'Route Description',
+        -- Count how many Assets in the route
+        (SELECT COUNT(dbo.route_stop.[route])
+        FROM dbo.route_stop
+        WHERE dbo.pm.[route] = dbo.route_stop.[route]) AS 'Asset Count',
+
+        -- Job Plan Information
+        dbo.pm.jpnum AS 'Job Plan No.',
+        dbo.jobplan.[description] AS 'Job Plan Description',
+
+        -- PM Work Order Information
+        dbo.pm.wostatus AS 'WO Default Status',
+        dbo.pm.[owner] AS 'WO Default Owner',
+        dbo.pm.ownergroup AS 'WO Default Owner Group',
+        dbo.pm.lead AS 'WO Default Lead',
+        dbo.pm.persongroup AS 'WO Default Person Group',
+    
+        -- PM Plan Cost
+        dbo.pm.costcenter AS 'Cost Center',
+        dbo.costcenter.[description] AS 'Cost Center Description'
+        -- Sub Query || Total Labor Cost
+        -- Sub Query || Total Material Cost
+        -- Sub Query || Total Service Cost
+        -- Sub Query || Total Tool Cost
+
+FROM dbo.pm -- Main Table
+
+-- Use LEFT JOIN as there may be NULL values against asset, locations or routes
+LEFT JOIN dbo.locations
+ON dbo.pm.[location] = dbo.locations.[location] -- Foreign Key Building CAAN No.
+
+LEFT JOIN dbo.asset
+ON dbo.pm.assetnum = dbo.asset.[description] -- Foreign Key for Asset
+
+LEFT JOIN dbo.routes -- Foreign Key for Route
+ON dbo.pm.[route] = dbo.routes.route
+
+LEFT JOIN dbo.jobplan -- Foreign Key for Job Plan
+ON dbo.pm.jpnum = dbo.jobplan.[description]
+
+LEFT JOIN dbo.costcenter
+ON dbo.pm.costcenter = dbo.costcenter.[description]
+
+WHERE 
+        dbo.pm.siteid = 'CAMPUS'
+    AND dbo.pm.persongroup = 'M4'
+    AND dbo.pm.[status] = 'ACTIVE'
+
+ORDER BY 'Asset Count' DESC
 ```
